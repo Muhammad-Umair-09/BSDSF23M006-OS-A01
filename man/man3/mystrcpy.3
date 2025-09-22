@@ -1,0 +1,28 @@
+.TH MYSTRCPY 3 "September 22, 2025" "Version 0.4.1" "Library Functions"
+.SH NAME
+mystrcpy \- copy a NUL-terminated string
+.SH SYNOPSIS
+int mystrcpy(char *dest, const char *src);
+.SH DESCRIPTION
+Copies the NUL-terminated string pointed to by **src** into the buffer pointed
+to by **dest**, including the final NUL byte.
+
+The destination buffer **dest** MUST have enough space to hold the contents of
+**src** plus the terminating NUL. Failure to provide adequate space will cause
+undefined behavior (buffer overflow).
+
+On success the function returns the number of characters copied (not counting
+the terminating NUL). If **dest** or **src** is **NULL**, the function returns **-1**.
+
+.SH RETURN VALUE
+Number of characters copied (>= 0) on success; **-1** on error.
+
+.SH EXAMPLE
+.B
+char buf[32];
+mystrcpy(buf, "Hello");
+# buf now contains "Hello"
+
+.SH AUTHOR
+Muhammad Umair <muhammadumair40984@gmail.com>
+

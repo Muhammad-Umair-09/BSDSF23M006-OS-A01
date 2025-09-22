@@ -1,0 +1,28 @@
+.TH MYSTRCAT 3 "September 22, 2025" "Version 0.4.1" "Library Functions"
+.SH NAME
+mystrcat \- append one string to another
+.SH SYNOPSIS
+int mystrcat(char *dest, const char *src);
+.SH DESCRIPTION
+Appends the NUL-terminated string **src** to the end of the NUL-terminated
+string **dest**. The caller must ensure that **dest** has enough capacity to
+hold its original contents, the appended characters from **src**, and the final
+NUL byte.
+
+The function locates the terminating NUL in **dest**, then copies characters
+from **src**, and finally writes a terminating NUL.
+
+.SH RETURN VALUE
+Returns the number of characters appended (not including the terminating NUL)
+on success. Returns **-1** on error (for example, if **dest == NULL** or
+**src == NULL**).
+
+.SH EXAMPLE
+.B
+char buf[32] = "Hello";
+mystrcat(buf, ", world!");
+# buf now contains "Hello, world!"
+
+.SH AUTHOR
+Muhammad Umair <muhammadumair40984@gmail.com>
+

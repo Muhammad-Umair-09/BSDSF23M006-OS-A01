@@ -1,0 +1,34 @@
+% CLIENT(1) Version 0.1.0 | OS Assignment - Multi-file Build
+
+NAME
+    client - a simple program demonstrating multi-file compilation and linking in C
+
+SYNOPSIS
+    ./bin/client
+
+DESCRIPTION
+    The 'client' executable is a simple program built as part of Feature 2 of the OS assignment.
+    It demonstrates:
+        - Organizing source files into multiple .c and .h files
+        - Using a Makefile for compilation
+        - Producing a single executable from multiple object files
+
+    This version is compiled directly from all source files using the Makefile rule:
+
+        $(TARGET): $(OBJECTS)
+
+    which links all object files together to create the final binary.
+
+OPTIONS
+    This program does not accept command-line options in its current version.
+
+EXAMPLES
+    Compile the project:
+        $ make
+
+    Run the executable:
+        $ ./bin/client
+
+AUTHOR
+    Muhammad Umair <your_email@example.com>
+

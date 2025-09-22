@@ -1,0 +1,35 @@
+.TH MYSTRNCPY 3 "September 22, 2025" "Version 0.4.1" "Library Functions"
+.SH NAME
+mystrncpy \- copy at most n characters from a string
+.SH SYNOPSIS
+int mystrncpy(char *dest, const char *src, int n);
+.SH DESCRIPTION
+Copies at most **n** characters from **src** into **dest**. This implementation
+ensures that **dest** is NUL-terminated (unless **n <= 0**, in which case the
+function returns **-1**).
+
+Behavior summary:
+.IP "\(bu" 4
+If **src** length < **n**: copies the entire **src** and appends a single NUL.
+.IP "\(bu" 4
+If **src** length >= **n**: copies up to **n** characters from **src** and then
+appends a NUL (so at most **n** characters of content are copied but the result
+is always NUL-terminated in this implementation).
+.PP
+
+The caller must ensure **dest** has space for the copied characters plus the
+terminator.
+
+.SH RETURN VALUE
+Returns the number of characters actually copied (>= 0). Returns **-1** for
+invalid arguments (e.g., **dest == NULL**, **src == NULL**, or **n <= 0**).
+
+.SH EXAMPLE
+.B
+char buf[10];
+mystrncpy(buf, "abcdefghijk", 5);
+# buf contains "abcde"
+
+.SH AUTHOR
+Muhammad Umair <muhammadumair40984@gmail.com>
+

@@ -1,0 +1,42 @@
+.TH WORDCOUNT 3 "September 22, 2025" "Version 0.4.1" "Library Functions"
+.SH NAME
+wordCount \- count lines, words and characters in a file stream
+.SH SYNOPSIS
+int wordCount(FILE *file, int *lines, int *words, int *chars);
+.SH DESCRIPTION
+Reads from the already-opened file stream **file** until EOF and counts:
+.IP "\(bu" 4
+The number of lines (incremented when '\n' is seen).
+.IP "\(bu" 4
+The number of words (a word is treated as a sequence of non-space characters;
+transitions from whitespace to non-whitespace start a new word).
+.IP "\(bu" 4
+The number of characters (every character read increments the character count).
+.PP
+
+The function stores results into the integers pointed to by **lines**, **words**
+and **chars**. All three pointers must be valid (non-NULL).
+
+This function returns **0** on success. On error (for example if **file == NULL**
+or one of the output pointers is NULL) it returns **-1**.
+
+.SH RETURN VALUE
+Returns **0** on success, **-1** on failure.
+
+.SH NOTES
+The function reads the stream until EOF and leaves the file position at EOF.
+If the caller needs to reuse the same stream afterwards, call **rewind(file)** or
+**fseek(file, 0, SEEK_SET)** after wordCount returns.
+
+.SH EXAMPLE
+.B
+FILE *f = fopen("sample.txt", "r");
+int L, W, C;
+if (wordCount(f, &L, &W, &C) == 0) {
+    printf("lines=%d words=%d chars=%d\n", L, W, C);
+}
+fclose(f);
+
+.SH AUTHOR
+Muhammad Umair <muhammadumair40984@gmail.com>
+

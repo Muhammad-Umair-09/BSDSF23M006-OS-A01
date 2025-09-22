@@ -1,0 +1,56 @@
+.TH MYGREP 3 "September 22, 2025" "Version 0.4.1" "Library Functions"
+.SH NAME
+mygrep \- search a file stream for lines containing a substring and return matches
+.SH SYNOPSIS
+int mygrep(FILE *fp, const char *search_str, char ***matches);
+.SH DESCRIPTION
+Searches the open file stream **fp** line by line for occurrences of the substring
+**search_str**. For every line that contains **search_str**, the function allocates
+a copy of that line (using dynamic memory) and stores the pointer to the copy in
+a dynamically allocated array.
+
+After the call:
+.IP "\(bu" 4
+If one or more matches were found, **\*matches** will point to an array of
+char* pointers and the function returns the number of matches (a non-negative
+int).
+.IP "\(bu" 4
+If no matches were found, the function returns **0** and sets **\*matches = NULL**.
+.IP "\(bu" 4
+On error (for example, **fp == NULL**, **search_str == NULL**, or memory
+allocation failure), the function returns **-1** and **\*matches** is undefined.
+.PP
+
+Memory management:
+.IP "\(bu" 4
+The caller is **responsible** for freeing the returned memory. For **n** matches:
+.br
+`for (i = 0; i < n; ++i) free(matches[i]); free(matches);`
+.PP
+
+Implementation notes:
+.IP "\(bu" 4
+This function typically reads lines with a fixed-size buffer (e.g. using
+`fgets`). Very long lines may be truncated by that buffer in some
+implementations — consider using a dynamic line reader if long-line support
+is required.
+.PP
+
+.SH RETURN VALUE
+Returns the number of matching lines (>= 0) on success. Returns **-1** on error.
+
+.SH EXAMPLE
+.B
+char **results = NULL;
+int count = mygrep(fp, "TODO", &results);
+if (count > 0) {
+    for (int i = 0; i < count; ++i) {
+        puts(results[i]);
+        free(results[i]);
+    }
+    free(results);
+}
+
+.SH AUTHOR
+Muhammad Umair <muhammadumair40984@gmail.com>
+

@@ -1,0 +1,22 @@
+.TH MYSTRLEN 3 "September 22, 2025" "Version 0.4.1" "Library Functions"
+.SH NAME
+mystrlen \- compute length of a C string
+.SH SYNOPSIS
+int mystrlen(const char *s);
+.SH DESCRIPTION
+The function **mystrlen** returns the number of characters in the NUL-terminated
+string pointed to by **s**, **excluding** the terminating NUL byte.
+
+If **s** is **NULL**, the function returns **-1** to indicate an error.
+
+.SH RETURN VALUE
+On success returns the length (a non-negative **int**). On error (for example
+when **s == NULL**) returns **-1**.
+
+.SH NOTES
+This implementation does not check buffer sizes; the caller must ensure **s**
+points to a valid NUL-terminated string.
+
+.SH AUTHOR
+Muhammad Umair <muhammadumair40984@gmail.com>
+
