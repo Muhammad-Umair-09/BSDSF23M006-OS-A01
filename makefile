@@ -1,24 +1,27 @@
 
-CC     = gcc
-CFLAGS = -Wall -g -Iinclude
-TARGET = ./bin/client
-OBJS   = src/mystrfunctions.o src/myfilefunctions.o src/main.o
+CC = gcc
+CFLAGS = -Iinclude -Wall
+AR = ar
+ARFLAGS = rcs
+TARGET = bin/client_static
+LIBDIR = lib
+LIB = $(LIBDIR)/libmyutils.a
+OBJS = src/main.o
+UTIL_OBJS = src/mystrfunctions.o src/myfilefunctions.o
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-	@$(CC) $(OBJS) -o $(TARGET)
-	@echo "Build complete: $(TARGET)"
+$(TARGET): $(OBJS) $(LIB)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) -L$(LIBDIR) -lmyutils
 
 
-$(OBJS):
-	@$(MAKE) -C src
+$(LIB): $(UTIL_OBJS)
+	$(AR) $(ARFLAGS) $@ $^
+	ranlib $@
+
+src/%.o: src/%.c include/%.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@$(MAKE) -C src clean
-	@rm -f $(TARGET)
-	@echo "Cleaned project root"
-
-
-
+	rm -f src/*.o $(TARGET) $(LIB)
 
