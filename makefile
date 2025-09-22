@@ -1,27 +1,46 @@
-
 CC = gcc
 CFLAGS = -Iinclude -Wall
 AR = ar
 ARFLAGS = rcs
-TARGET = bin/client_static
+
+# Directories
+BINDIR = bin
 LIBDIR = lib
-LIB = $(LIBDIR)/libmyutils.a
-OBJS = src/main.o
-UTIL_OBJS = src/mystrfunctions.o src/myfilefunctions.o
+SRCDIR = src
+INCDIR = include
 
-all: $(TARGET)
+# Targets
+STATIC_TARGET = $(BINDIR)/client_static
+DYNAMIC_TARGET = $(BINDIR)/client_dynamic
+STATIC_LIB = $(LIBDIR)/libmyutils.a
+DYNAMIC_LIB = $(LIBDIR)/libmyutils.so
 
-$(TARGET): $(OBJS) $(LIB)
+# Objects
+OBJS = $(SRCDIR)/main.o
+UTIL_OBJS = $(SRCDIR)/mystrfunctions.o $(SRCDIR)/myfilefunctions.o
+
+# Default build (both static + dynamic)
+all: $(STATIC_TARGET) $(DYNAMIC_TARGET)
+
+# --- Static build ---
+$(STATIC_TARGET): $(OBJS) $(STATIC_LIB)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) -L$(LIBDIR) -lmyutils
 
-
-$(LIB): $(UTIL_OBJS)
+$(STATIC_LIB): $(UTIL_OBJS)
 	$(AR) $(ARFLAGS) $@ $^
 	ranlib $@
 
-src/%.o: src/%.c include/%.h
-	$(CC) $(CFLAGS) -c $< -o $@
+# --- Dynamic build ---
+$(DYNAMIC_TARGET): $(OBJS) $(DYNAMIC_LIB)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) -L$(LIBDIR) -lmyutils
 
+$(DYNAMIC_LIB): $(UTIL_OBJS)
+	$(CC) -shared -o $@ $^
+
+# --- Compile objects ---
+$(SRCDIR)/%.o: $(SRCDIR)/%.c $(INCDIR)/%.h
+	$(CC) $(CFLAGS) -fPIC -c $< -o $@
+
+# --- Clean ---
 clean:
-	rm -f src/*.o $(TARGET) $(LIB)
-
+	rm -f $(SRCDIR)/*.o $(STATIC_TARGET) $(DYNAMIC_TARGET) $(STATIC_LIB) $(DYNAMIC_LIB)
